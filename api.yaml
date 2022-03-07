@@ -1,0 +1,67 @@
+swagger: "2.0"
+info:
+  version: "0.1"
+  title: User details
+host: www.pfizerpro.com
+basePath: /prod
+schemes:
+  - https
+  - http
+definitions:
+  sitename:
+    type: object
+    required:
+      - sitename
+    properties:
+      sitename:
+        type: string
+      type:
+        type: string
+      brands:
+        type: string
+paths:
+  /get-config:
+    get:
+      summary: "Get site details"
+      parameters:
+       - name: sitename
+         in: query
+         required: True
+         type: string
+      responses:
+        "200":
+          description: "successful operation"
+        "500":
+          description: "Internal Server error"
+        "403":
+          description: "Unauthorised"
+    post:
+      summary: "Add new sitename or update the existing"
+      parameters:
+        - in: body
+          name: sitename
+          description: New site to Add.
+          schema:
+            $ref: '#/definitions/sitename'
+      responses:
+        "200":
+          description: "successful operation"
+        "500":
+          description: "Internal Server error"
+        "403":
+          description: "Unauthorised"
+  /get-config{sitename}:
+    delete:
+      summary: "Delete the site records"
+      parameters:
+        - name: "sitename"
+          in: "path"
+          required: True
+          type: string
+      responses:
+          "200":
+            description: "successful operation"
+          "500":
+            description: "Internal Server error"
+          "403":
+            description: "Unauthorised"
