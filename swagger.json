@@ -1,0 +1,106 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "0.1",
+    "title": "User details"
+  },
+  "host": "www.pfizerpro.com",
+  "basePath": "/prod",
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/get-config": {
+      "get": {
+        "summary": "Get site details",
+        "parameters": [
+          {
+            "name": "sitename",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "403": {
+            "description": "Unauthorised"
+          },
+          "500": {
+            "description": "Internal Server error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add new sitename or update the existing",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "sitename",
+            "description": "New site to Add.",
+            "schema": {
+              "$ref": "#/definitions/sitename"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "403": {
+            "description": "Unauthorised"
+          },
+          "500": {
+            "description": "Internal Server error"
+          }
+        }
+      }
+    },
+    "/get-config{sitename}": {
+      "delete": {
+        "summary": "Delete the site records",
+        "parameters": [
+          {
+            "name": "sitename",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "403": {
+            "description": "Unauthorised"
+          },
+          "500": {
+            "description": "Internal Server error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "sitename": {
+      "type": "object",
+      "required": [
+        "sitename"
+      ],
+      "properties": {
+        "sitename": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "brands": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
