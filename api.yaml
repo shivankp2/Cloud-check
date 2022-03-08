@@ -1,9 +1,8 @@
 swagger: "2.0"
 info:
   version: "0.1"
-  title: User details
-host: www.pfizerpro.com
-basePath: /prod
+  title: Site details
+host: "pfizerprocom.pfizerstatic.io"
 schemes:
   - https
   - http
