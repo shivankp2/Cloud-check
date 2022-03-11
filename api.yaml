@@ -101,12 +101,8 @@ paths:
       responses:
         "200":
           description: "successful added"
-        "500":
-          description: "Internal Server error"
         "401":
-          description: "Unauthorised"
-          schema:
-            $ref: "#/definitions/authorisation_error"
+          description: "Unauthorised to perform this action"
   /update-config:  
     put:
       summary : "Update the recoreds"
@@ -119,10 +115,7 @@ paths:
           $ref: "#/definitions/sitename"
       responses:
         "400":
-          description: "Invalid ID supplied"
-        "404":
-          description : "Site not exists"
-          
+          description: "Invalid sitename supplied"
   /delete-config/{sitename}:
     delete:
       summary: "Delete the site records"
