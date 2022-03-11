@@ -15,13 +15,19 @@
         "sitename"
       ],
       "properties": {
+        "client_id": {
+          "type": "number"
+        },
+        "client_key": {
+          "type": "string"
+        },
+        "site_id": {
+          "type": "string"
+        },
+        "creation_time": {
+          "type": "string"
+        },
         "site_title": {
-          "type": "string"
-        },
-        "site_type": {
-          "type": "string"
-        },
-        "Disease_area": {
           "type": "string"
         },
         "status": {
@@ -35,28 +41,32 @@
         "sitedata"
       ],
       "properties": {
-        "site_title": {
+        "client_id": {
+          "type": "number"
+        },
+        "client_key": {
           "type": "string"
         },
-        "id": {
+        "site_id": {
+          "type": "string"
+        },
+        "creation_time": {
+          "type": "string"
+        },
+        "site_title": {
           "type": "string"
         },
         "status": {
           "type": "number"
-        },
-        "site_type": {
-          "type": "string"
-        },
-        "Disease_area": {
-          "type": "string"
         }
       },
       "example": {
-        "site_title": "Oncology",
-        "id": 1234,
-        "status": "online",
-        "site_type": "user registrations",
-        "disease_area": "oncology"
+        "clinet_id": 10202,
+        "client_key": "A4tz3aGSI238ziQJ",
+        "site_id": 201,
+        "creation_time": "11/03/2022",
+        "site_title": "oncology",
+        "status": "online"
       }
     },
     "error_response": {
@@ -67,7 +77,18 @@
         }
       },
       "example": {
-        "error_message": "Invalid response"
+        "error_message": "site not found"
+      }
+    },
+    "authorisation_error": {
+      "type": "object",
+      "properties": {
+        "error_message": {
+          "type": "string"
+        }
+      },
+      "example": {
+        "error_message": "Not authorised for this operation"
       }
     }
   },
@@ -77,7 +98,7 @@
         "summary": "Get site details",
         "parameters": [
           {
-            "name": "sitename",
+            "name": "site detail",
             "in": "query",
             "required": true,
             "type": "string"
@@ -90,17 +111,22 @@
               "$ref": "#/definitions/correct_response"
             }
           },
-          "403": {
-            "description": "Unauthorised"
+          "401": {
+            "description": "Unauthorised",
+            "schema": {
+              "$ref": "#/definitions/authorisation_error"
+            }
           },
-          "500": {
-            "description": "Internal Server error",
+          "404": {
+            "description": "Site not found",
             "schema": {
               "$ref": "#/definitions/error_response"
             }
           }
         }
-      },
+      }
+    },
+    "/post-config": {
       "post": {
         "summary": "Add new site info",
         "parameters": [
@@ -115,16 +141,21 @@
         ],
         "responses": {
           "200": {
-            "description": "successful operation"
+            "description": "successful added"
           },
-          "403": {
-            "description": "Unauthorised"
+          "401": {
+            "description": "Unauthorised",
+            "schema": {
+              "$ref": "#/definitions/authorisation_error"
+            }
           },
           "500": {
             "description": "Internal Server error"
           }
         }
-      },
+      }
+    },
+    "/update-config": {
       "put": {
         "summary": "Update the recoreds",
         "parameters": [
@@ -141,11 +172,14 @@
         "responses": {
           "400": {
             "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Site not exists"
           }
         }
       }
     },
-    "/get-config{sitename}": {
+    "/delete-config/{sitename}": {
       "delete": {
         "summary": "Delete the site records",
         "parameters": [
@@ -158,10 +192,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Deleted successful",
-            "schema": {
-              "$ref": "#/definitions/correct_response"
-            }
+            "description": "Deleted successful"
           }
         }
       }

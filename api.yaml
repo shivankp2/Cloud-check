@@ -11,36 +11,43 @@ definitions:
     required:
       - sitename
     properties:
+        client_id:
+          type: number
+        client_key:
+          type: string
+        site_id:
+          type: string
+        creation_time:
+          type: string
         site_title:
-          type: string
-        site_type:
-          type: string
-        Disease_area:
           type: string
         status:
           type: number
-
+          
   correct_response:
       type: object
       required:
         - sitedata
       properties:
-        site_title:
+        client_id:
+          type: number
+        client_key:
           type: string
-        id:
+        site_id:
+          type: string
+        creation_time:
+          type: string
+        site_title:
           type: string
         status:
           type: number
-        site_type:
-          type: string
-        Disease_area:
-          type: string
       example:
-          site_title: Oncology
-          id: 01234
+          clinet_id : 10202
+          client_key: A4tz3aGSI238ziQJ
+          site_id: 201
+          creation_time: 11/03/2022
+          site_title: oncology
           status: online
-          site_type: user registrations
-          disease_area: oncology
           
   error_response:
       type: object
@@ -48,7 +55,15 @@ definitions:
         error_message:
           type: string
       example:
-        error_message: Invalid response
+        error_message: site not found
+  authorisation_error:
+      type: object
+      properties:
+        error_message:
+          type: string
+      example:
+          error_message: Not authorised for this operation
+    
         
         
 paths:
@@ -56,7 +71,7 @@ paths:
     get:
       summary: "Get site details"
       parameters:
-       - name: sitename
+       - name: site detail
          in: query
          required: True
          type: string
@@ -65,12 +80,16 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/correct_response"
-        "500":
-          description: "Internal Server error"
+        "404":
+          description: "Site not found"
           schema:
             $ref: "#/definitions/error_response"
-        "403":
+        "401":
           description: "Unauthorised"
+          schema:
+            $ref: "#/definitions/authorisation_error"
+            
+  /post-config:
     post:
       summary: "Add new site info"
       parameters:
@@ -81,12 +100,14 @@ paths:
             $ref: '#/definitions/sitename'
       responses:
         "200":
-          description: "successful operation"
+          description: "successful added"
         "500":
           description: "Internal Server error"
-        "403":
+        "401":
           description: "Unauthorised"
-    
+          schema:
+            $ref: "#/definitions/authorisation_error"
+  /update-config:  
     put:
       summary : "Update the recoreds"
       parameters:
@@ -99,8 +120,10 @@ paths:
       responses:
         "400":
           description: "Invalid ID supplied"
-    
-  /get-config{sitename}:
+        "404":
+          description : "Site not exists"
+          
+  /delete-config/{sitename}:
     delete:
       summary: "Delete the site records"
       parameters:
@@ -111,6 +134,4 @@ paths:
       responses:
         "200":
           description: "Deleted successful"
-          schema:
-             $ref: "#/definitions/correct_response"
           
