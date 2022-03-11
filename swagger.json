@@ -4,12 +4,73 @@
     "version": "0.1",
     "title": "User details"
   },
-  "host": "www.pfizerpro.com",
-  "basePath": "/prod",
   "schemes": [
     "https",
     "http"
   ],
+  "definitions": {
+    "sitename": {
+      "type": "object",
+      "required": [
+        "sitename"
+      ],
+      "properties": {
+        "site_title": {
+          "type": "string"
+        },
+        "site_type": {
+          "type": "string"
+        },
+        "Disease_area": {
+          "type": "string"
+        },
+        "status": {
+          "type": "number"
+        }
+      }
+    },
+    "correct_response": {
+      "type": "object",
+      "required": [
+        "sitedata"
+      ],
+      "properties": {
+        "site_title": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "number"
+        },
+        "site_type": {
+          "type": "string"
+        },
+        "Disease_area": {
+          "type": "string"
+        }
+      },
+      "example": {
+        "site_title": "Oncology",
+        "id": 1234,
+        "status": "online",
+        "site_type": "user registrations",
+        "disease_area": "oncology"
+      }
+    },
+    "error_response": {
+      "type": "object",
+      "properties": {
+        "error_message": {
+          "type": "string"
+        }
+      },
+      "example": {
+        "error_message": "Invalid response"
+      }
+    }
+  },
   "paths": {
     "/get-config": {
       "get": {
@@ -24,18 +85,24 @@
         ],
         "responses": {
           "200": {
-            "description": "successful operation"
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/correct_response"
+            }
           },
           "403": {
             "description": "Unauthorised"
           },
           "500": {
-            "description": "Internal Server error"
+            "description": "Internal Server error",
+            "schema": {
+              "$ref": "#/definitions/error_response"
+            }
           }
         }
       },
       "post": {
-        "summary": "Add new sitename or update the existing",
+        "summary": "Add new site info",
         "parameters": [
           {
             "in": "body",
@@ -57,6 +124,25 @@
             "description": "Internal Server error"
           }
         }
+      },
+      "put": {
+        "summary": "Update the recoreds",
+        "parameters": [
+          {
+            "name": "sitename",
+            "in": "body",
+            "description": "Site details that needs to be added to the updated",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/sitename"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
+          }
+        }
       }
     },
     "/get-config{sitename}": {
@@ -72,33 +158,11 @@
         ],
         "responses": {
           "200": {
-            "description": "successful operation"
-          },
-          "403": {
-            "description": "Unauthorised"
-          },
-          "500": {
-            "description": "Internal Server error"
+            "description": "Deleted successful",
+            "schema": {
+              "$ref": "#/definitions/correct_response"
+            }
           }
-        }
-      }
-    }
-  },
-  "definitions": {
-    "sitename": {
-      "type": "object",
-      "required": [
-        "sitename"
-      ],
-      "properties": {
-        "sitename": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        },
-        "brands": {
-          "type": "string"
         }
       }
     }
